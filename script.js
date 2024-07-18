@@ -4,7 +4,7 @@ document.getElementById('restart-button').addEventListener('click', resetGame);
 let currentMovie = null;
 let currentQuestionIndex = 0;
 let correctAnswerIndex = 0;
-let scoreLevel = 15; // Startet bei der ersten Stufe
+let scoreLevel = 0; // Startet bei der ersten Stufe
 let tabCheated = false;
 
 const apiKey = '809f0efc';
@@ -50,6 +50,7 @@ async function getRandomMovieByGenre(genre) {
 async function startQuiz() {
     const genreSelect = document.getElementById('genre-select');
     const selectedGenre = genreSelect.value;
+    document.getElementById('quiz-question').style.display = "flex";
     scoreLevel = 0;
     updateScoreboard();
     await loadNewQuestion(selectedGenre);
@@ -66,28 +67,35 @@ async function loadNewQuestion(genre) {
     }
 }
 
-async function displayQuizQuestion(movie) {
+function displayQuizQuestion(movie) {
     if (!movie) {
         console.error('Kein Film geladen');
         showGameOver();
         return;
     }
 
-    document.getElementById('quiz-question').style.display = 'block';
     const questionObj = questions[currentQuestionIndex];
-    document.getElementById('question-text').textContent = `${questionObj.question} "${movie.Title}"?`;
-    document.getElementById('movie-poster').innerHTML = `<img src="${movie.Poster}" alt="${movie.Title} Poster">`;
+    const questionText = `${questionObj.question} "${movie.Title}"?`;
+    
+    // Frage anzeigen
+    document.getElementById('question-text').textContent = questionText;
 
-    const correctAnswer = movie[questionObj.key];
-    const wrongAnswers = await generateWrongAnswers(questionObj.key, correctAnswer);
+    // Bild anzeigen
+    document.getElementById('movie-poster').innerHTML = `<img src="${movie.Poster}" alt="${movie.Title} Poster" style="max-width: 200px; max-height: 300px;">`;
 
-    const options = [...wrongAnswers];
-    correctAnswerIndex = Math.floor(Math.random() * 4);
-    options.splice(correctAnswerIndex, 0, correctAnswer);
+    // Antwortmöglichkeiten generieren und anzeigen
+    generateWrongAnswers(questionObj.key, movie[questionObj.key]).then(wrongAnswers => {
+        const options = [...wrongAnswers];
+        correctAnswerIndex = Math.floor(Math.random() * 4);
+        options.splice(correctAnswerIndex, 0, movie[questionObj.key]);
 
-    document.querySelectorAll('.option-button').forEach((button, index) => {
-        button.textContent = options[index];
-        button.onclick = () => checkAnswer(index);
+        document.querySelectorAll('.option-button').forEach((button, index) => {
+            button.textContent = options[index];
+            button.onclick = () => checkAnswer(index);
+        });
+
+        // Sprachausgabe der Frage
+        speak(questionText);
     });
 }
 
@@ -149,3 +157,12 @@ document.addEventListener('visibilitychange', function() {
         tabCheated = true;
     }
 });
+
+// Funktion zur Sprachausgabe
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
+    // Optionale Anpassung der Stimme, um eine ähnliche Stimme wie Günther Jauch zu emulieren
+    utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.name.includes('Google')) || null;
+    window.speechSynthesis.speak(utterance);
+}
