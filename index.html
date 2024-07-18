@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film-Quiz-Spiel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Film-Quiz-Spiel</h1>
+    <div id="lives">❤️❤️❤️</div>
+    <div id="game-container">
+        <label for="genre-select">Genre auswählen:</label>
+        <select id="genre-select">
+            <option value="action">Action</option>
+            <option value="thriller">Thriller</option>
+            <option value="comedy">Komödie</option>
+            <option value="drama">Drama</option>
+        </select>
+        <button id="start-quiz-button">Quiz starten</button>
+        <div id="quiz-question" style="display: none;">
+            <p id="question-text"></p>
+            <input type="text" id="answer-input" placeholder="Antwort eingeben...">
+            <button id="submit-answer">Antworten</button>
+            <div id="movie-poster"></div>
+        </div>
+        <div id="movie-info"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
