@@ -11,7 +11,6 @@ let questionMusic = new Audio('Sounds/Question.mp3'); // Musik für Fragen
 let correctSound = new Audio('Sounds/Win.mp3'); // Ton für richtige Antwort
 let incorrectSound = new Audio('Sounds/Lose.mp3'); // Ton für falsche Antwort
 
-// Startet die Lobby-Musik, wenn die Seite geladen wird
 window.addEventListener('DOMContentLoaded', (event) => {
     playMusic();
 });
@@ -26,10 +25,23 @@ const genreMap = {
 
 const questions = [
     { key: 'Director', question: 'Wie lautet der Name des Regisseurs von' },
-    { key: 'Year', question: 'Wann war die veröffentlichung des Films' },
+    { key: 'Year', question: 'Wann war die Veröffentlichung des Films' },
     { key: 'Genre', question: 'Welches Genre hat der Film' },
     { key: 'Actors', question: 'Nenne einen der Hauptdarsteller von' }
 ];
+
+async function startQuiz() {
+    const genreSelect = document.getElementById('genre-select');
+    const selectedGenre = genreSelect.value;
+    document.getElementById('quiz-question').style.display = "flex";
+    scoreLevel = 0;
+    updateScoreboard();
+    stopMusic();
+    questionMusic.loop = true; // Frage-Musik in Dauerschleife abspielen
+    questionMusic.play();
+    await loadNewQuestion(selectedGenre);
+}
+
 
 async function getRandomMovieByGenre(genre) {
     try {
@@ -56,23 +68,17 @@ async function getRandomMovieByGenre(genre) {
     }
 }
 
-async function startQuiz() {
-    const genreSelect = document.getElementById('genre-select');
-    const selectedGenre = genreSelect.value;
-    document.getElementById('quiz-question').style.display = "flex";
-    scoreLevel = 0;
-    updateScoreboard();
-    stopMusic();
-    questionMusic.loop = true; // Frage-Musik in Dauerschleife abspielen
-    questionMusic.play();
-    await loadNewQuestion(selectedGenre);
-}
-
 async function loadNewQuestion(genre) {
     try {
         currentMovie = await getRandomMovieByGenre(genre);
-        currentQuestionIndex = Math.floor(Math.random() * questions.length);
-        displayQuizQuestion(currentMovie);
+        const difficultyLevel = Math.min(scoreLevel + 1, questions.length); // Sicherstellen, dass der Schwierigkeitsgrad nicht zu hoch ist
+        currentQuestionIndex = Math.floor(Math.random() * difficultyLevel);
+
+        if (scoreLevel >= 14) { // Die letzte Frage (10. Frage) erreichen
+            displayWinMessage();
+        } else {
+            displayQuizQuestion(currentMovie);
+        }
     } catch (error) {
         console.error('Fehler beim Laden der Frage:', error);
         showGameOver('Es gab ein Problem beim Laden der Frage. Bitte versuche es später erneut.');
@@ -88,14 +94,11 @@ function displayQuizQuestion(movie) {
 
     const questionObj = questions[currentQuestionIndex];
     const questionText = `${questionObj.question} "${movie.Title}"?`;
-    
-    // Frage anzeigen
+
     document.getElementById('question-text').textContent = questionText;
 
-    // Bild anzeigen
     document.getElementById('movie-poster').innerHTML = `<img src="${movie.Poster}" alt="${movie.Title} Poster" style="max-width: 200px; max-height: 300px;">`;
 
-    // Antwortmöglichkeiten generieren und anzeigen
     generateWrongAnswers(questionObj.key, movie[questionObj.key]).then(wrongAnswers => {
         const options = [...wrongAnswers];
         correctAnswerIndex = Math.floor(Math.random() * 4);
@@ -106,8 +109,7 @@ function displayQuizQuestion(movie) {
             button.onclick = () => checkAnswer(index);
         });
 
-        // Sprachausgabe der Frage
-        speak(questionText);
+        speak(questionText, 2000); // Verzögerte Sprachausgabe der Frage
     }).catch(error => {
         console.error('Fehler beim Generieren falscher Antworten:', error);
         showGameOver('Es gab ein Problem beim Generieren der Antwortmöglichkeiten.');
@@ -125,7 +127,6 @@ async function generateWrongAnswers(key, correctAnswer) {
         }
     } catch (error) {
         console.error('Fehler beim Laden falscher Antworten:', error);
-        // Sicherstellen, dass wir trotzdem mindestens 3 falsche Antworten haben
         while (wrongAnswers.size < 3) {
             wrongAnswers.add('Falsche Antwort');
         }
@@ -169,12 +170,13 @@ function resetGame() {
     document.getElementById('game-container').style.display = 'flex';
     document.getElementById('game-over').style.display = 'none';
     tabCheated = false;
+    scoreLevel = 0; // Zurücksetzen des Punktestands
+    updateScoreboard();
     questionMusic.loop = true; // Frage-Musik in Dauerschleife abspielen
     questionMusic.play();
     startQuiz();
 }
 
-// Detect tab switching
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
         tabCheated = true;
@@ -186,17 +188,32 @@ function playMusic() {
     lobbyMusic.play().catch(error => console.error('Fehler beim Abspielen der Lobby-Musik:', error));
 }
 
-// Musik stoppen
 function stopMusic() {
     lobbyMusic.pause();
     lobbyMusic.currentTime = 0; // Zurück zum Anfang der Musik
 }
 
-// Funktion zur Sprachausgabe
-function speak(text) {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function speak(text, delay = 1000) {
+    await sleep(delay);
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
-    // Optionale Anpassung der Stimme, um eine ähnliche Stimme wie Günther Jauch zu emulieren
     utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.name.includes('Google')) || null;
     window.speechSynthesis.speak(utterance);
+}
+
+function displayWinMessage() {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('quiz-question').style.display = 'none';
+    document.getElementById('game-over').style.display = 'block';
+    document.getElementById('game-over-message').innerHTML = `
+        <h1>Herzlichen Glückwunsch!</h1>
+        <h2>Du hast gewonnen!</h2>
+        <img src="https://img.icons8.com/ios/452/money--v1.png" alt="Geld" style="width: 100px; height: 100px;">
+        <p>Leider gibt es hier kein echtes Geld, aber du hast es geschafft!</p>
+    `;
+    questionMusic.pause(); // Frage-Musik stoppen
 }
