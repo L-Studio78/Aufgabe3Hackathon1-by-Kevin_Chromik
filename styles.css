@@ -98,3 +98,5 @@ img {
 #quiz-question{
     flex-direction: column;
 }
+.hidden { display: none; }
+.jokers { margin-top: 20px; }
