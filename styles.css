@@ -1,102 +1,199 @@
+/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
-    padding: 20px;
+    background-color: #001f3f; /* Dunkelblau */
+    color: #fff;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
-    margin-bottom: 20px;
+    text-align: center;
+    color: #ffdc00; /* Gelb */
+    margin: 20px 0;
 }
 
 #game-container {
     display: flex;
     justify-content: space-between;
-    max-width: 1200px;
-    margin: auto;
+    padding: 20px;
+    gap: 20px; /* Abstand zwischen den beiden Hauptbereichen */
 }
 
 #quiz-section {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    flex: 3;
     padding: 20px;
-    width: 60%;
+    background-color: #003366; /* Dunkelblau */
+    border-radius: 10px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #scoreboard-section {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    flex: 1;
     padding: 20px;
-    width: 30%;
-}
-
-#score-list {
-    list-style: none;
-    padding: 0;
-}
-
-#score-list li {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    text-align: left;
-}
-
-#score-list li.current {
-    background-color: #28a745;
-}
-
-#game-over {
-    background-color: #fff;
+    background-color: #003366; /* Dunkelblau */
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    padding: 20px;
-    display: inline-block;
-    width: 300px;
-    margin: auto;
 }
 
-input, button {
-    padding: 10px;
-    margin: 10px 0;
-    width: 100%;
-    box-sizing: border-box;
+#quiz-question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-img {
-    max-width: 100%;
-    border-radius: 10px;
+#question-text {
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #movie-poster {
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#movie-poster img {
+    max-width: 200px;
+    max-height: 300px;
+    border: 2px solid #ffdc00; /* Gelb */
+    border-radius: 5px;
 }
 
 #options-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 10px;
+    width: 100%;
+    max-width: 600px; /* Maximale Breite der Optionen */
+    align-items: center;
 }
 
 .option-button {
-    background-color: #007bff;
+    background-color: #28a745; /* Grün */
     color: #fff;
     border: none;
-    border-radius: 5px;
+    padding: 15px;
+    font-size: 1.1em;
     cursor: pointer;
-    padding: 10px;
-    font-size: 1em;
+    border-radius: 10px;
+    width: 100%; /* Vollständige Breite des Containers */
+    max-width: 300px; /* Maximale Breite der Buttons */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schattierung für Tiefe */
+    transition: background-color 0.3s, transform 0.3s; /* Sanfte Übergänge */
 }
 
 .option-button:hover {
-    background-color: #0056b3;
+    background-color: #218838; /* Dunkelgrün */
+    transform: scale(1.05); /* Vergrößerung bei Hover */
 }
-#quiz-question{
-    flex-direction: column;
+
+#scoreboard-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
-.hidden { display: none; }
-.jokers { margin-top: 20px; }
+
+#scoreboard-section li {
+    background-color: #0056b3; /* Dunkelblau */
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+#scoreboard-section .current {
+    background-color: #ffdc00; /* Gelb */
+    color: #001f3f; /* Dunkelblau */
+    font-weight: bold;
+}
+
+#game-over {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background-color: #003366; /* Dunkelblau */
+    border-radius: 10px;
+}
+
+#game-over h2 {
+    color: #ffdc00; /* Gelb */
+}
+
+#game-over img {
+    width: 100px;
+    height: 100px;
+    margin: 20px 0;
+}
+
+#restart-button {
+    background-color: #ffdc00; /* Gelb */
+    color: #001f3f; /* Dunkelblau */
+    border: none;
+    padding: 15px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px; /* Maximale Breite des Buttons */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schattierung für Tiefe */
+    transition: background-color 0.3s, transform 0.3s; /* Sanfte Übergänge */
+}
+
+#restart-button:hover {
+    background-color: #e5c300; /* Etwas dunkleres Gelb */
+    transform: scale(1.05); /* Vergrößerung bei Hover */
+}
+
+/* Media Queries für mobile Geräte */
+@media (max-width: 768px) {
+    #game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #quiz-section {
+        margin-right: 0;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    #scoreboard-section {
+        width: 100%;
+        margin-top: 20px; /* Abstand zwischen Quiz-Bereich und Gewinnstufen */
+    }
+
+    #options-container {
+        max-width: 100%; /* Vollständige Breite der Optionen */
+    }
+}
+/* styles.css */
+
+#start-quiz-button {
+    background: linear-gradient(135deg, #007bff, #00c853); /* Farbverlauf von Blau nach Grün */
+    color: #fff;
+    border: none;
+    padding: 15px 30px; /* Mehr Padding für größere Größe */
+    margin-top: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Schattierung für Tiefe */
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Sanfte Übergänge */
+    font-weight: bold;
+}
+
+#start-quiz-button:hover {
+    background: linear-gradient(135deg, #0056b3, #009624); /* Dunklerer Farbverlauf bei Hover */
+    transform: scale(1.05); /* Vergrößerung bei Hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Stärkere Schattierung bei Hover */
+}
+
+#start-quiz-button:active {
+    background: linear-gradient(135deg, #003d7a, #007a33); /* Noch dunklerer Farbverlauf bei Klick */
+    transform: scale(1); /* Zurücksetzen der Vergrößerung bei Klick */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Leichtere Schattierung bei Klick */
+}
