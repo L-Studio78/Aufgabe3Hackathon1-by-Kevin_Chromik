@@ -25,17 +25,36 @@ const genreMap = {
 
 const popularMovies = [
     'Avengers', 'Star Wars', 'Harry Potter', 'Inception', 'The Dark Knight',
-    'Forrest Gump', 'Titanic', 'The Matrix', 'Jurassic Park', 'The Godfather'
+    'Forrest Gump', 'Titanic', 'The Matrix', 'Jurassic Park', 'The Godfather',
+    'Pulp Fiction', 'The Lord of the Rings', 'The Shawshank Redemption', 
+    'Fight Club', 'Interstellar', 'Gladiator', 'The Lion King', 
+    'Pirates of the Caribbean', 'Avatar', 'The Silence of the Lambs', 
+    'The Social Network', 'The Hunger Games', 'Frozen', 'Shrek', 
+    'Toy Story', 'Black Panther', 'The Wolf of Wall Street', 
+    'La La Land', 'The Avengers: Endgame', 'Spider-Man: No Way Home'
 ];
 
-const questions = [
+
+const questions = [ 
+    { key: 'Runtime', question: 'Wie lang ist der Film (in Minuten) von' },
+    { key: 'Awards', question: 'Hat der Film Auszeichnungen gewonnen? Wenn ja, nenne eine davon von' },
+    { key: 'BoxOffice', question: 'Wie viel hat der Film an den Kinokassen eingespielt? (in Dollar) von' },
     { key: 'Director', question: 'Wie lautet der Name des Regisseurs von' },
     { key: 'Year', question: 'Wann war die Veröffentlichung des Films' },
     { key: 'Genre', question: 'Welches Genre hat der Film' },
-    { key: 'Actors', question: 'Nenne einen der Hauptdarsteller von' }
+    { key: 'Actors', question: 'Nenne einen der Hauptdarsteller von' },
 ];
 
+// Funktion zum Mischen des Arrays
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 async function startQuiz() {
+    shuffleArray(questions);
     const genreSelect = document.getElementById('genre-select');
     const selectedGenre = genreSelect.value;
     document.getElementById('quiz-question').style.display = "flex";
