@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizflix</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Quizflix</h1>
+    <div id="game-container">
+        <div id="quiz-section">
+            <label for="genre-select">Genre auswählen:</label>
+            <select id="genre-select">
+                <option value="action">Action</option>
+                <option value="thriller">Thriller</option>
+                <option value="comedy">Komödie</option>
+                <option value="drama">Drama</option>
+            </select>
+            <button id="start-quiz-button">Quiz starten</button>
+
+            <div id="quiz-question" style="display: none;">
+                <p id="question-text"></p>
+                <div id="movie-poster"></div>
+                <div id="options-container">
+                    <button class="option-button" data-option="0"></button>
+                    <button class="option-button" data-option="1"></button>
+                    <button class="option-button" data-option="2"></button>
+                    <button class="option-button" data-option="3"></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="scoreboard-section">
+            <h2>Gewinnstufen</h2>
+            <ul id="score-list">
+                <li>1. 100€</li>
+                <li>2. 200€</li>
+                <li>3. 300€</li>
+                <li>4. 500€</li>
+                <li>5. 1.000€</li>
+                <li>6. 2.000€</li>
+                <li>7. 4.000€</li>
+                <li>8. 8.000€</li>
+                <li>9. 16.000€</li>
+                <li>10. 32.000€</li>
+                <li>11. 64.000€</li>
+                <li>12. 125.000€</li>
+                <li>13. 250.000€</li>
+                <li>14. 500.000€</li>
+                <li>15. 1.000.000€</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="game-over" style="display: none;">
+        <h2>Game Over</h2>
+        <p id="game-over-message"></p>
+        <button id="restart-button">Neustart</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
